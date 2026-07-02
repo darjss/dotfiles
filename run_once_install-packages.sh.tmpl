@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+# Bootstrap script — installs all packages on a fresh Arch/CachyOS machine.
+# Run once by chezmoi on first apply.
+
+set -euo pipefail
+
+echo "=== Installing paru (AUR helper) ==="
+if ! command -v paru &>/dev/null; then
+    sudo pacman -S --needed base-devel git
+    tmpdir=$(mktemp -d)
+    git clone https://aur.archlinux.org/paru.git "$tmpdir/paru"
+    cd "$tmpdir/paru"
+    makepkg -si --noconfirm
+    cd -
+    rm -rf "$tmpdir"
+fi
+
+echo "=== Installing official repo packages ==="
+sudo pacman -S --needed --noconfirm \
+    base base-devel \
+    fish git gh \
+    niri dms-shell dms-shell-niri dms-shell-hyprland greetd-dms-greeter-git \
+    ghostty \
+    zed \
+    chezmoi age \
+    mpd mpv rmpc \
+    lazygit lazydocker tmux \
+    thunar xfce4 \
+    pipewire pipewire-alsa pipewire-jack pipewire-pulse wireplumber \
+    networkmanager wpa_supplicant bluez bluez-utils \
+    swaylock swayidle wl-clipboard wl-mirror cliphist \
+    matugen \
+    noto-fonts-cjk wqy-zenhei ttf-firacode-nerd ttf-jetbrains-mono-nerd \
+    papirus-icon-theme hicolor-icon-theme catppuccin-gtk-theme-mocha \
+    gtk3 gtk4 \
+    docker docker-compose \
+    go cargo-binstall rust \
+    nodejs npm pnpm bun \
+    jq parallel unzip wget ncdu cloc \
+    imagemagick pandoc-cli tectonic texlive-basic texlive-binextra texlive-langcyrillic texlive-latexextra \
+    cups cups-pk-helper system-config-printer \
+    libnotify libsecret gnome-keyring \
+    keyd openrazer-daemon openrazer-driver-dkms \
+    brightnessctl power-profiles-daemon \
+    zoxide \
+    obs-studio \
+    postgresql postgresql-libs \
+    tailscale \
+    usbutils intel-ucode linux-firmware sof-firmware \
+    nano \
+    xdg-desktop-portal-gnome xdg-desktop-portal-gtk xdg-desktop-portal-wlr xwayland-satellite \
+    wayland-protocols qt5-wayland qt6-wayland qt6-base qt6-declarative qt6-svg qt6-shadertools \
+    ;
+
+echo "=== Installing AUR packages ==="
+paru -S --needed --noconfirm \
+    cursor-bin \
+    devin-desktop \
+    claude-desktop-bin \
+    openai-codex-bin openai-codex-desktop \
+    opencode-desktop-bin \
+    vscodium-bin \
+    zen-browser-bin \
+    helium-browser-bin \
+    vesktop-bin \
+    beeper-v4-bin \
+    cider \
+    spotiflac-bin \
+    stremio-linux-shell \
+    onlyoffice-bin \
+    yaak-bin \
+    warp-ai-terminal-bin \
+    z-code-bin \
+    nuvio-appimage \
+    balatro balatro-multiplayer-launcher-bin \
+    nicotine-plus-git \
+    localsend-bin \
+    pacseek-bin \
+    herdr-bin \
+    factory-cli-bin \
+    mongosh-bin \
+    lovely-injector \
+    html2markdown \
+    quickshell-git \
+    t3code-nightly-bin \
+    google-chrome \
+    ;
+
+echo "=== Enabling services ==="
+sudo systemctl enable --now NetworkManager
+sudo systemctl enable --now bluetooth
+sudo systemctl enable --now docker
+sudo systemctl enable --now keyd
+sudo systemctl enable --now openrazer-daemon
+sudo systemctl enable --now mpd --user 2>/dev/null || true
+
+echo "=== Done! ==="
+echo "Next: run 'chezmoi apply' to deploy configs."

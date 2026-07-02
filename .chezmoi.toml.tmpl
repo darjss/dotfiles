@@ -1,0 +1,11 @@
+{{/* chezmoi data — per-machine variables */}}
+{{/* On a new machine, chezmoi init will prompt for these */}}
+[data]
+    hostname = {{ .chezmoi.hostname | quote }}
+    username = {{ .chezmoi.username | quote }}
+
+    # Monitor setup — override per machine via chezmoi init --prompt
+    # or edit ~/.config/chezmoi/chezmoi.toml after init
+    [data.monitors]
+        laptop = "eDP-1"
+        external = "HDMI-A-1"

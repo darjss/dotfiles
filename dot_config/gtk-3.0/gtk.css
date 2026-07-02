@@ -1,0 +1,17 @@
+/* Small Nemo polish on top of Catppuccin */
+.nemo-window .sidebar,
+NemoWindow .sidebar {
+  padding: 6px;
+}
+
+.nemo-window placessidebar row,
+NemoWindow placessidebar row {
+  border-radius: 10px;
+  margin: 2px 6px;
+  padding: 3px 6px;
+}
+
+.nemo-window .view,
+NemoWindow .view {
+  border-radius: 12px;
+}

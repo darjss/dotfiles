@@ -1,0 +1,69 @@
+// Zed keymap — custom bindings
+[
+  // ── Global / Workspace ────────────────────────────────────
+  {
+    "context": "Workspace",
+    "bindings": {
+      // Project panel toggle (override whatever ctrl-e did)
+      "ctrl-e": "project_panel::ToggleFocus",
+      // Right dock toggle
+      "ctrl-shift-b": "workspace::ToggleRightDock",
+      // Theme picker
+      "ctrl-k ctrl-t": "theme_selector::Toggle",
+      // Terminal toggle
+      "ctrl-shift-t": "terminal_panel::ToggleFocus"
+    }
+  },
+
+  // ── Editor ────────────────────────────────────────────────
+  {
+    "context": "Editor",
+    "bindings": {
+      // Tab cycling (from nemeott dotfiles)
+      "ctrl-tab": "pane::ActivateNextItem",
+      "ctrl-shift-tab": "pane::ActivatePrevItem",
+      // Quick file switching
+      "ctrl-p": "file_finder::Toggle",
+      // Go to symbol in file
+      "ctrl-shift-o": "outline::Toggle",
+      // Toggle line comment
+      "ctrl-/": "editor::ToggleComments",
+      // Move lines up/down
+      "alt-up": "editor::MoveLineUp",
+      "alt-down": "editor::MoveLineDown",
+      // Duplicate line
+      "ctrl-shift-d": "editor::DuplicateLineDown",
+      // Delete line
+      "ctrl-shift-k": "editor::DeleteLine",
+      // Multi-cursor: add selection for next occurrence
+      "ctrl-d": "editor::SelectNext",
+      // Expand/shrink selection by syntax
+      "ctrl-shift-right": "editor::SelectLargerSyntaxNode",
+      "ctrl-shift-left": "editor::SelectSmallerSyntaxNode"
+    }
+  },
+
+  // ── Project Panel ─────────────────────────────────────────
+  {
+    "context": "ProjectPanel && not_editing",
+    "bindings": {
+      // Quick operations in file tree
+      "a": "project_panel::NewFile",
+      "shift-a": "project_panel::NewDirectory",
+      "r": "project_panel::Rename",
+      "d": "project_panel::Delete",
+      "x": "project_panel::Cut",
+      "c": "project_panel::Copy",
+      "p": "project_panel::Paste"
+    }
+  },
+
+  // ── Terminal ──────────────────────────────────────────────
+  {
+    "context": "Terminal",
+    "bindings": {
+      "ctrl-shift-c": "terminal::Copy",
+      "ctrl-shift-v": "terminal::Paste"
+    }
+  }
+]

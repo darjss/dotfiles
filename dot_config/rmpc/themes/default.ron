@@ -1,0 +1,138 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+
+// Clean dark theme with blue accents
+(
+    // === Base Colors ===
+    background_color: None,              // Use terminal background
+    text_color: "#cdd6f4",               // Light text
+    header_background_color: None,
+    modal_background_color: "#1e1e2e",
+
+    // === UI Elements ===
+    highlighted_item_style: (
+        fg: "#89b4fa",                   // Blue highlight
+        modifiers: "Bold",
+    ),
+    current_item_style: (
+        fg: "#1e1e2e",                   // Dark text
+        bg: "#89b4fa",                   // Blue background
+        modifiers: "Bold",
+    ),
+    borders_style: (
+        fg: "#45475a",                   // Subtle borders
+    ),
+    highlight_border_style: (
+        fg: "#89b4fa",                   // Blue active border
+    ),
+
+    // === Tab Bar ===
+    tab_bar: (
+        active_style: (
+            fg: "#1e1e2e",
+            bg: "#89b4fa",
+            modifiers: "Bold",
+        ),
+        inactive_style: (
+            fg: "#6c7086",
+        ),
+    ),
+
+    // === Progress Bar ===
+    progress_bar: (
+        symbols: ["", "━", "━", "─", ""],
+        track_style: (fg: "#45475a"),
+        elapsed_style: (fg: "#89b4fa"),
+        thumb_style: (fg: "#89b4fa"),
+    ),
+
+    // === Scrollbar ===
+    scrollbar: (
+        symbols: ["│", "█", "▲", "▼"],
+        track_style: (fg: "#45475a"),
+        ends_style: (fg: "#45475a"),
+        thumb_style: (fg: "#89b4fa"),
+    ),
+
+    // === Browser Symbols ===
+    symbols: (
+        song: "♪",
+        dir: "",
+        playlist: "",
+        marker: "►",
+        ellipsis: "…",
+    ),
+
+    // === Song Table ===
+    song_table_format: [
+        (
+            prop: "$track",
+            width: "4%",
+            alignment: Right,
+        ),
+        (
+            prop: "$title|$file",
+            width: "35%",
+        ),
+        (
+            prop: "$artist|'Unknown'",
+            width: "25%",
+            style: (fg: "#a6adc8"),
+        ),
+        (
+            prop: "$album|'-'",
+            width: "25%",
+            style: (fg: "#6c7086"),
+        ),
+        (
+            prop: "$duration",
+            width: "11%",
+            alignment: Right,
+            style: (fg: "#6c7086"),
+        ),
+    ],
+
+    // === Header ===
+    header: (
+        rows: [
+            (
+                left: [
+                    (kind: Text(" ♪ "), style: (fg: "#89b4fa", modifiers: "Bold")),
+                    (kind: Property(Title(0)), style: (fg: "#cdd6f4", modifiers: "Bold")),
+                ],
+                center: [],
+                right: [
+                    (kind: Property(Status(State)), style: (fg: "#a6e3a1")),
+                    (kind: Text("  ")),
+                    (kind: Property(Status(Volume)), style: (fg: "#89b4fa")),
+                    (kind: Text(" ")),
+                ],
+            ),
+            (
+                left: [
+                    (kind: Text("   ")),
+                    (kind: Property(Artist(0)), style: (fg: "#a6adc8")),
+                    (kind: Text(" - "), style: (fg: "#45475a")),
+                    (kind: Property(Album(0)), style: (fg: "#6c7086")),
+                ],
+                center: [],
+                right: [
+                    (kind: Property(Status(Elapsed))),
+                    (kind: Text(" / ")),
+                    (kind: Property(Status(Duration))),
+                    (kind: Text(" ")),
+                ],
+            ),
+        ],
+    ),
+
+    // === Log Styles ===
+    level_styles: (
+        info: (fg: "#89b4fa"),
+        warn: (fg: "#f9e2af"),
+        error: (fg: "#f38ba8"),
+        debug: (fg: "#a6e3a1"),
+        trace: (fg: "#cba6f7"),
+    ),
+)

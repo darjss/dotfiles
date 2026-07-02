@@ -1,0 +1,13 @@
+{
+  "window.commandCenter": true,
+  "cursor.cpp.disabledLanguages": [
+    "markdown",
+    "plaintext",
+    "python"
+  ],
+  "files.autoSave": "afterDelay",
+  "window.autoDetectColorScheme": false,
+  "editor.fontFamily": "'FiraCode Nerd Font Mono', 'Droid Sans Mono', 'monospace', monospace",
+  "terminal.integrated.fontFamily": "'FiraCode Nerd Font Mono'",
+  "editor.fontLigatures": true
+}

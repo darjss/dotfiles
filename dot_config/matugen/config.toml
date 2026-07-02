@@ -1,0 +1,5 @@
+[config]
+
+[templates.zed]
+input_path = '/home/darjs/.config/matugen/templates/zed-theme.json'
+output_path = '/home/darjs/.config/zed/themes/matugen-frosted-glass.json'

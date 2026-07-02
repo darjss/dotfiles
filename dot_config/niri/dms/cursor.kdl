@@ -1,0 +1,6 @@
+// DMS 1.2 cursor configuration
+// Managed by DMS Settings -> Cursor & Layout
+cursor {
+    xcursor-theme "Bibata-Original-Ice"
+    xcursor-size 24
+}

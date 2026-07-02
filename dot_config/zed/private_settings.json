@@ -1,0 +1,164 @@
+  // Zed settings — matugen frosted glass
+{
+  // ── Typography ─────────────────────────────────────────────
+  // "edit_predictions": {
+  //   "provider": "zed"
+  // },
+  "show_edit_predictions": true,
+  "cli_default_open_behavior": "new_window",
+  "agent": {
+    "dock": "right",
+    "favorite_models": [],
+    "model_parameters": []
+  },
+  "git_panel": {
+    "dock": "left"
+  },
+  "agent_servers": {
+    "claude-acp": {
+      "type": "registry"
+    },
+    "opencode": {
+      "type": "registry"
+    },
+    "cursor": {
+      "type": "registry"
+    },
+    "codex-acp": {
+      "type": "registry"
+    }
+  },
+  "ui_font_family": "FiraCode Nerd Font",
+  "ui_font_size": 13,
+  "ui_font_weight": 400,
+  "buffer_font_family": "FiraCode Nerd Font",
+  "buffer_font_size": 14,
+  "buffer_font_weight": 400,
+  "buffer_line_height": { "custom": 1.7 },
+
+  // ── Theme ──────────────────────────────────────────────────
+  "icon_theme": "Colored Zed Icons",
+  "theme": "Matugen Frosted Glass",
+
+  "base_keymap": "VSCode",
+  "autosave": { "after_delay": { "milliseconds": 400 } },
+
+  // ── Panels — right dock, clean left gutter ─────────────────
+  "project_panel": {
+    "dock": "right",
+    "indent_size": 16,
+    "show_scrollbars": false
+  },
+  "outline_panel": {
+    "dock": "right",
+    "show_scrollbars": false
+  },
+  "collaboration_panel": { "dock": "right" },
+  "notification_panel": { "dock": "right" },
+  "chat_panel": { "dock": "right" },
+
+  // ── Minimal Chrome — strip everything ──────────────────────
+  "tab_bar": {
+    "show": true,
+    "show_nav_history_buttons": false
+  },
+  "tabs": {
+    "file_icons": true,
+    "git_status": true,
+    "close_position": "right"
+  },
+  "toolbar": {
+    "breadcrumbs": true,
+    "quick_actions": false,
+    "selections_menu": false
+  },
+  "scrollbar": {
+    "show": "never"
+  },
+  "minimap": { "show": "never" },
+  "gutter": {
+    "line_numbers": true,
+    "code_actions": false,
+    "folds": false,
+    "runnables": false
+  },
+
+  // ── Editor — quiet, distraction-free ───────────────────────
+  "current_line_highlight": "gutter",
+  "indent_guides": {
+    "enabled": true,
+    "coloring": "indent_aware",
+    "background_coloring": "disabled"
+  },
+  "inlay_hints": {
+    "enabled": true,
+    "show_type_hints": false,
+    "show_parameter_hints": false,
+    "show_other_hints": false
+  },
+  "cursor_shape": "bar",
+  "cursor_blink": true,
+  "show_whitespaces": "none",
+  "soft_wrap": "none",
+  "preferred_line_length": 100,
+  "wrap_guides": [],
+
+  // ── Transparency — matched to niri 80/70 opacity ──────────
+  "active_pane_modifiers": {
+    "inactive_opacity": 0.5
+  },
+  "background_appearance": "blurred",
+
+  // ── Git — subtle inline blame ──────────────────────────────
+  "git": {
+    "inline_blame": {
+      "enabled": true,
+      "delay_ms": 800
+    },
+    "gutter_deletions": false
+  },
+
+  // ── Language Servers ───────────────────────────────────────
+  // tsgo only (drop vtsls) so big monorepos aren't indexed twice.
+  // "!biome" disables the Biome LSP everywhere it auto-attaches — erxes
+  // (and these projects) use ESLint + Prettier, so Biome was pure overhead.
+  "languages": {
+    "TypeScript": { "language_servers": ["tsgo", "!biome", "!vtsls"] },
+    "TSX": { "language_servers": ["tsgo", "!biome", "!vtsls"] },
+    "JavaScript": { "language_servers": ["tsgo", "!biome", "!vtsls"] },
+    "JSX": { "language_servers": ["tsgo", "!biome", "!vtsls"] },
+    "JSON": { "language_servers": ["!biome", "..."] },
+    "JSONC": { "language_servers": ["!biome", "..."] },
+    "CSS": { "language_servers": ["!biome", "..."] }
+  },
+
+  // Keep file watchers + language servers out of generated/dependency dirs.
+  "file_scan_exclusions": [
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "**/.next",
+    "**/.nx",
+    "**/coverage",
+    "**/.turbo",
+    "**/.git",
+    "**/.cache"
+  ],
+
+  // ── Terminal — matching aesthetic ──────────────────────────
+  "terminal": {
+    "font_family": "FiraCode Nerd Font",
+    "font_size": 13,
+    "line_height": "comfortable",
+    "button": false
+  },
+
+  "telemetry": { "metrics": false, "diagnostics": false },
+  "auto_update": false,
+  "restore_on_startup": "last_session",
+  "confirm_quit": false,
+  "format_on_save": "on",
+  "ensure_final_newline_on_save": true,
+  "remove_trailing_whitespace_on_save": true,
+  "show_update_notification": false
+}

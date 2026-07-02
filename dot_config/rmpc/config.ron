@@ -1,0 +1,166 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+
+(
+    // === Connection ===
+    address: "127.0.0.1:6600",
+    password: None,
+
+    // === Theme ===
+    theme: "default",
+
+    // === Playback ===
+    volume_step: 5,
+    keep_state_on_song_change: true,
+
+    // === UI Settings ===
+    max_fps: 60,
+    scrolloff: 4,
+    wrap_navigation: true,
+    enable_mouse: true,
+    scroll_amount: 3,
+    enable_config_hot_reload: true,
+    status_update_interval_ms: 500,
+
+    // === Queue behavior ===
+    select_current_song_on_change: true,
+    center_current_song_on_change: true,
+
+    // === Search ===
+    search: (
+        case_sensitive: false,
+        mode: Contains,
+        tags: [
+            (value: "any", label: "Any"),
+            (value: "artist", label: "Artist"),
+            (value: "album", label: "Album"),
+            (value: "title", label: "Title"),
+            (value: "genre", label: "Genre"),
+        ],
+    ),
+
+    // === Album Art ===
+    album_art: (
+        method: Auto,
+        max_size_px: (width: 600, height: 600),
+        vertical_align: Center,
+        horizontal_align: Center,
+    ),
+
+    // === Keybindings ===
+    // Simplified, Spotify/Apple Music-like bindings.
+    // One key per action. Arrows are primary; a small vim layer (j/k, g/G) remains.
+    keybinds: (
+        global: {
+            // === App ===
+            "q": Quit,
+            "?": ShowHelp,
+            ":": CommandMode,
+
+            // === Playback ===
+            "<Space>": TogglePause,
+            "s": Stop,
+            "n": NextTrack,
+            "p": PreviousTrack,
+            ">": SeekForward,
+            "<": SeekBack,
+            "+": VolumeUp,
+            "-": VolumeDown,
+
+            // === Playback modes ===
+            "r": ToggleRepeat,
+            "z": ToggleRandom,
+            "c": ToggleConsume,
+            "S": ToggleSingle,
+
+            // === Tabs ===
+            "<Tab>": NextTab,
+            "<S-Tab>": PreviousTab,
+            "1": SwitchToTab(0),
+            "2": SwitchToTab(1),
+            "3": SwitchToTab(2),
+            "4": SwitchToTab(3),
+            "5": SwitchToTab(4),
+            "6": SwitchToTab(5),
+            "7": SwitchToTab(6),
+
+            // === Library ===
+            "u": Update,
+            "U": Rescan,
+
+            // === Info ===
+            "I": ShowCurrentSongInfo,
+            "o": ShowOutputs,
+        },
+
+        navigation: {
+            // === Movement ===
+            "j": Down,
+            "k": Up,
+            "h": Left,
+            "l": Right,
+            "<Down>": Down,
+            "<Up>": Up,
+            "<Left>": Left,
+            "<Right>": Right,
+
+            // === Jump ===
+            "g": Top,
+            "G": Bottom,
+            "<Home>": Top,
+            "<End>": Bottom,
+
+            // === Page navigation ===
+            "<C-d>": DownHalf,
+            "<C-u>": UpHalf,
+            "<C-f>": PageDown,
+            "<C-b>": PageUp,
+            "<PageDown>": PageDown,
+            "<PageUp>": PageUp,
+
+            // === Selection ===
+            "v": Select,
+            "<Space>": Select,
+            "V": InvertSelection,
+
+            // === Search ===
+            "/": EnterSearch,
+            "<C-n>": NextResult,
+            "<C-p>": PreviousResult,
+
+            // === Actions ===
+            "<Enter>": Confirm,
+            "<CR>": Confirm,
+            "<Esc>": Close,
+            "<C-c>": Close,
+
+            // === Add / Remove ===
+            "a": Add,
+            "A": AddAll,
+            "d": Delete,
+            "D": Delete,
+
+            // === Move items ===
+            "J": MoveDown,
+            "K": MoveUp,
+
+            // === Pane navigation ===
+            "<C-h>": PaneLeft,
+            "<C-j>": PaneDown,
+            "<C-k>": PaneUp,
+            "<C-l>": PaneRight,
+
+            // === Info ===
+            "i": ShowInfo,
+        },
+
+        queue: {
+            "d": Delete,
+            "D": DeleteAll,
+            "<Enter>": Play,
+            "C": JumpToCurrent,
+            "X": Shuffle,
+        },
+    ),
+)

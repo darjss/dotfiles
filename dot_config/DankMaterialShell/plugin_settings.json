@@ -1,0 +1,26 @@
+{
+  "dankPomodoroTimer": {
+    "enabled": true
+  },
+  "displayManager": {
+    "enabled": true
+  },
+  "emojiLauncher": {
+    "enabled": true
+  },
+  "wallpaperShufflerPlugin": {
+    "enabled": true,
+    "wallpaperPath": "~/Pictures/walls/walls-catppuccin-mocha",
+    "shuffleInterval": "1200"
+  },
+  "aiUsage": {
+    "enabled": true
+  },
+  "gnomeNetworkDisplays": {
+    "enabled": true,
+    "activeStreams": {}
+  },
+  "displayMirror": {
+    "enabled": true
+  }
+}

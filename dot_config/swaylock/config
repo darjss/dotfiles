@@ -1,0 +1,21 @@
+daemonize
+show-failed-attempts
+indicator
+clock
+font=JetBrains Mono
+screenshots
+inside-color=1e1e2ecc
+ring-color=89b4facc
+key-hl-color=a6e3a1cc
+line-color=00000000
+separator-color=00000000
+text-color=cdd6f4ff
+inside-clear-color=f9e2afcc
+ring-clear-color=f9e2afcc
+text-clear-color=11111bff
+inside-ver-color=89dcebcc
+ring-ver-color=89dcebcc
+text-ver-color=11111bff
+inside-wrong-color=f38ba8cc
+ring-wrong-color=f38ba8cc
+text-wrong-color=11111bff
