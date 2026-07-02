@@ -19,8 +19,8 @@
  * Auth/config is NOT backed up here -- that's in chezmoi (encrypted with age).
  */
 
-import { $, file, exists, mkdir, rm, spawn } from "bun";
-import { statSync } from "fs";
+import { $, file, spawn } from "bun";
+import { statSync, mkdirSync, rmSync, existsSync } from "fs";
 
 const BUCKET = "agent-sessions-backup";
 const TMP = "/tmp/agent-sessions-backup";
@@ -128,14 +128,14 @@ async function listR2(): Promise<string[]> {
 }
 
 async function backup(): Promise<void> {
-  await mkdir(TMP, { recursive: true });
+  mkdirSync(TMP, { recursive: true });
   const date = new Date().toISOString().split("T")[0];
   console.log("Backing up to R2 bucket: " + BUCKET + " (" + date + ")\n");
 
   for (const agent of AGENTS) {
     console.log("-- " + agent.name + " --");
     for (const p of agent.paths) {
-      if (!(await exists(p.local))) {
+      if (!(existsSync(p.local))) {
         console.log("  skip (missing): " + p.local);
         continue;
       }
@@ -145,13 +145,13 @@ async function backup(): Promise<void> {
 
       if (isDir(p.local)) {
         const archive = TMP + "/" + p.r2.split("/").pop();
-        await mkdir(archive.split("/").slice(0, -1).join("/"), { recursive: true });
+        mkdirSync(archive.split("/").slice(0, -1).join("/"), { recursive: true });
         console.log("  compressing " + p.local + " (" + sizeMB + "MB)...");
         await compressDir(p.local, archive);
         const compressedSize = (await file(archive).stat()).size / 1024 / 1024;
         console.log("  -> " + compressedSize.toFixed(1) + "MB, uploading to " + p.r2 + "...");
         await upload(archive, p.r2);
-        await rm(archive);
+        rmSync(archive);
       } else {
         console.log("  uploading " + p.local + " (" + sizeMB + "MB) -> " + p.r2 + "...");
         await upload(p.local, p.r2);
@@ -163,18 +163,18 @@ async function backup(): Promise<void> {
   // Write a manifest
   const manifest = {
     date: new Date().toISOString(),
-    machine: await run(["hostname"], { silent: true }).then((s) => s.trim()),
+    machine: process.env.HOSTNAME || "unknown",
     agents: AGENTS.map((a) => ({ name: a.name, paths: a.paths.map((p) => p.r2) })),
   };
   await Bun.write(TMP + "/manifest.json", JSON.stringify(manifest, null, 2));
   await upload(TMP + "/manifest.json", "manifest.json");
-  await rm(TMP + "/manifest.json");
+  rmSync(TMP + "/manifest.json");
 
   console.log("Done. Manifest uploaded to manifest.json");
 }
 
 async function restore(): Promise<void> {
-  await mkdir(TMP, { recursive: true });
+  mkdirSync(TMP, { recursive: true });
   console.log("Restoring from R2 bucket: " + BUCKET + "\n");
 
   for (const agent of AGENTS) {
@@ -192,15 +192,15 @@ async function restore(): Promise<void> {
 
       if (p.r2.endsWith(".tar.zst")) {
         const destParent = p.local.split("/").slice(0, -1).join("/");
-        await mkdir(destParent, { recursive: true });
+        mkdirSync(destParent, { recursive: true });
         console.log("  decompressing -> " + p.local + "...");
         await decompressDir(tmpFile, destParent);
-        await rm(tmpFile);
+        rmSync(tmpFile);
       } else {
         const destParent = p.local.split("/").slice(0, -1).join("/");
-        await mkdir(destParent, { recursive: true });
+        mkdirSync(destParent, { recursive: true });
         await Bun.write(p.local, await file(tmpFile).text());
-        await rm(tmpFile);
+        rmSync(tmpFile);
         console.log("  -> " + p.local);
       }
     }
