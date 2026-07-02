@@ -57,6 +57,65 @@ const AGENTS: Agent[] = [
   },
 ];
 
+// Browsers: selectively pick profile files (skip caches)
+// Each entry: { dir, files, r2 } — tar the selected files from dir
+interface BrowserBackup {
+  name: string;
+  dir: string;
+  files: string[];
+  r2: string;
+}
+
+const ZEN_PROFILE = HOME + "/.zen/yj1u2lgy.Default (release)";
+const HELIUM_PROFILE = HOME + "/.config/net.imput.helium/Default";
+
+const BROWSERS: BrowserBackup[] = [
+  {
+    name: "zen-browser",
+    dir: ZEN_PROFILE,
+    files: [
+      "places.sqlite", "logins.json", "key4.db", "cert9.db",
+      "prefs.js", "extensions.json", "extension-settings.json",
+      "containers.json", "search.json.mozlz4", "formhistory.sqlite",
+      "permissions.sqlite", "content-prefs.sqlite",
+    ],
+    r2: "zen-browser/profile.tar.zst",
+  },
+  {
+    name: "zen-extensions",
+    dir: ZEN_PROFILE + "/extensions",
+    files: [], // empty = all files in dir
+    r2: "zen-browser/extensions.tar.zst",
+  },
+  {
+    name: "zen-chrome",
+    dir: ZEN_PROFILE + "/chrome",
+    files: [],
+    r2: "zen-browser/chrome.tar.zst",
+  },
+  {
+    name: "helium-browser",
+    dir: HELIUM_PROFILE,
+    files: [
+      "Bookmarks", "Login Data", "Login Data For Account",
+      "Preferences", "Secure Preferences", "History", "Web Data",
+    ],
+    r2: "helium-browser/profile.tar.zst",
+  },
+  {
+    name: "helium-local-state",
+    dir: HOME + "/.config/net.imput.helium",
+    files: ["Local State"],
+    r2: "helium-browser/local-state.tar.zst",
+  },
+  {
+    name: "helium-extensions",
+    dir: HELIUM_PROFILE + "/Extensions",
+    files: [],
+    r2: "helium-browser/extensions.tar.zst",
+  },
+];
+
 async function run(cmd: string[], opts?: { silent?: boolean }): Promise<string> {
   const proc = spawn({
     cmd,
@@ -87,6 +146,18 @@ async function compressDir(dir: string, outPath: string): Promise<void> {
   const name = parts[parts.length - 1];
   const parent = parts.slice(0, -1).join("/");
   await $`tar -cf - -C ${parent} ${name} | zstd -19 -o ${outPath}`.quiet();
+}
+
+async function compressFiles(dir: string, files: string[], outPath: string): Promise<void> {
+  // tar specific files from a dir (not the whole dir)
+  if (files.length === 0) {
+    // empty file list = compress whole dir
+    await compressDir(dir, outPath);
+    return;
+  }
+  // Use -C to cd into dir, then list files explicitly
+  const fileArgs = files.map((f) => '"' + f + '"').join(" ");
+  await $`tar -cf - -C ${dir} ${files} | zstd -19 -o ${outPath}`.quiet();
 }
 
 async function decompressDir(archive: string, destParent: string): Promise<void> {
@@ -160,11 +231,30 @@ async function backup(): Promise<void> {
     console.log();
   }
 
+  // Back up browsers
+  console.log("-- browsers --");
+  for (const b of BROWSERS) {
+    if (!existsSync(b.dir)) {
+      console.log("  skip (missing): " + b.dir);
+      continue;
+    }
+    const archive = TMP + "/" + b.r2.split("/").pop();
+    mkdirSync(archive.split("/").slice(0, -1).join("/"), { recursive: true });
+    console.log("  compressing " + b.name + "...");
+    await compressFiles(b.dir, b.files, archive);
+    const compressedSize = (await file(archive).stat()).size / 1024 / 1024;
+    console.log("  -> " + compressedSize.toFixed(1) + "MB, uploading to " + b.r2 + "...");
+    await upload(archive, b.r2);
+    rmSync(archive);
+  }
+  console.log();
+
   // Write a manifest
   const manifest = {
     date: new Date().toISOString(),
     machine: process.env.HOSTNAME || "unknown",
     agents: AGENTS.map((a) => ({ name: a.name, paths: a.paths.map((p) => p.r2) })),
+    browsers: BROWSERS.map((b) => ({ name: b.name, r2: b.r2 })),
   };
   await Bun.write(TMP + "/manifest.json", JSON.stringify(manifest, null, 2));
   await upload(TMP + "/manifest.json", "manifest.json");
@@ -206,6 +296,27 @@ async function restore(): Promise<void> {
     }
     console.log();
   }
+
+  // Restore browsers
+  console.log("-- browsers --");
+  for (const b of BROWSERS) {
+    console.log("  downloading " + b.r2 + "...");
+    const tmpFile = TMP + "/" + b.r2.split("/").pop();
+
+    try {
+      await download(b.r2, tmpFile);
+    } catch {
+      console.log("  skip (not in R2): " + b.r2);
+      continue;
+    }
+
+    // Extract directly into the target dir (files are at tar root level)
+    mkdirSync(b.dir, { recursive: true });
+    console.log("  decompressing -> " + b.dir + "...");
+    await $`zstd -d -c ${tmpFile} | tar -xf - -C ${b.dir}`.quiet();
+    rmSync(tmpFile);
+  }
+  console.log();
 
   console.log("Restore complete.");
 }
